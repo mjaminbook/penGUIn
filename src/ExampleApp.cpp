@@ -6,10 +6,12 @@ using namespace std;
 namespace basicgraphics {
 	ExampleApp::ExampleApp(int argc, char** argv, std::string windowName, int windowWidth, int windowHeight) : BaseApp(argc, argv, windowName, windowWidth, windowHeight)
 	{
-		_box.reset(new Box(vec3(-0.5, -0.5, -0.5), vec3(0.5, 0.5, 0.5), vec4(1.0, 0.0, 0.0, 1.0)));
-        _angle = 0;
+//		_box.reset(new Box(vec3(-0.5, -0.5, -0.5), vec3(0.5, 0.5, 0.5), vec4(1.0, 0.0, 0.0, 1.0)));
+//        _angle = 0;
+//        
+//        drawSphere(_angle, 18.0, 7.0, vec4(1.0, 0.0, 1.0, 1.0));
         
-        drawSphere(_angle, 18.0, 7.0, vec4(1.0, 0.0, 1.0, 1.0));
+        _head.reset(new Sphere(vec3(0,0,0), 0.5, vec4(1,1,1,1)));
 	}
 
 	ExampleApp::~ExampleApp() {}
@@ -26,7 +28,7 @@ namespace basicgraphics {
 
 		glm::mat4 rotate = glm::toMat4(glm::angleAxis(_angle, vec3(0, 1, 0))) * glm::toMat4(glm::angleAxis((float)radians(20.0), vec3(1.0, 0.0, 0.0)));
 		_angle += radians(1.0);
-		model = rotate * model;
+//		model = rotate * model;
 
 		// Update shader variables
 		_shader.setUniform("view_mat", view);
@@ -36,14 +38,15 @@ namespace basicgraphics {
 
 		
 
-		_box->draw(_shader, model);
-        _line->draw(_shader, model);
-        _sphere->draw(_shader, model);
+//		_box->draw(_shader, model);
+//        _line->draw(_shader, model);
+//        _sphere->draw(_shader, model);
+        _head->draw(_shader, model);
 	}
     
     void ExampleApp::drawSphere(float angle, float dist, float radius, vec4 color) {
-        _line.reset(new Line(vec3(0, 0, 0), vec3(dist * cos(angle), dist * sin(angle), 0), vec3(0,0,1), 0.1, color));
-        _sphere.reset(new Sphere(vec3(dist * cos(angle), dist * sin(angle), 0), radius, color));
+//        _line.reset(new Line(vec3(0, 0, 0), vec3(dist * cos(angle), dist * sin(angle), 0), vec3(0,0,1), 0.1, color));
+//        _sphere.reset(new Sphere(vec3(dist * cos(angle), dist * sin(angle), 0), radius, color));
     }
 
 	void ExampleApp::onEvent(shared_ptr<Event> event) {

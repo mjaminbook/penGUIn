@@ -9,9 +9,9 @@ namespace basicgraphics {
 			~ExampleApp();
 
 		private:
-			std::unique_ptr<Box> _box;
-            std::unique_ptr<Line> _line;
-            std::unique_ptr<Sphere> _sphere;
+//			std::unique_ptr<Box> _box;
+//            std::unique_ptr<Line> _line;
+            std::unique_ptr<Sphere> _head;
 			float _angle;
 
             void drawSphere(float angle, float dist, float radius, vec4 color);
