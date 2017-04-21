@@ -9,13 +9,18 @@ namespace basicgraphics {
 			~ExampleApp();
 
 		private:
-//			std::unique_ptr<Box> _box;
-//            std::unique_ptr<Line> _line;
+			std::unique_ptr<Mesh> _mesh;
+            std::vector< std::shared_ptr<Texture> > textures;
+        
             std::unique_ptr<Sphere> _head;
+            std::unique_ptr<Cone> _beak;
+            std::unique_ptr<Sphere> _left_eye;
+            std::unique_ptr<Sphere> _right_eye;
 			float _angle;
 
             void drawSphere(float angle, float dist, float radius, vec4 color);
 			void onRenderGraphics() override;
 			void onEvent(std::shared_ptr<Event> event) override;
+            void drawHead(float radius);
 	};
 }
