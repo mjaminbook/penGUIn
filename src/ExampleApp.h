@@ -12,9 +12,13 @@ namespace basicgraphics {
 			std::unique_ptr<Box> _box;
             std::unique_ptr<Line> _line;
             std::unique_ptr<Sphere> _sphere;
+			std::unique_ptr<Feet> _foot;
 			float _angle;
+			glm::mat4 rotation;
+			bool mouseDown;
+			glm::vec2 lastMousePos;
+			
 
-            void drawSphere(float angle, float dist, float radius, vec4 color);
 			void onRenderGraphics() override;
 			void onEvent(std::shared_ptr<Event> event) override;
 	};

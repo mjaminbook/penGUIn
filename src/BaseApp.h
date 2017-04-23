@@ -29,6 +29,7 @@
 #include "Box.h"
 #include "Line.h"
 #include "Event.h"
+#include "Feet.h"
 
 namespace basicgraphics {
 

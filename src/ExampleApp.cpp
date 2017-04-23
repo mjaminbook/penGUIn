@@ -6,10 +6,8 @@ using namespace std;
 namespace basicgraphics {
 	ExampleApp::ExampleApp(int argc, char** argv, std::string windowName, int windowWidth, int windowHeight) : BaseApp(argc, argv, windowName, windowWidth, windowHeight)
 	{
-		_box.reset(new Box(vec3(-0.5, -0.5, -0.5), vec3(0.5, 0.5, 0.5), vec4(1.0, 0.0, 0.0, 1.0)));
-        _angle = 0;
-        
-        drawSphere(_angle, 18.0, 7.0, vec4(1.0, 0.0, 1.0, 1.0));
+		_foot.reset(new Feet(1., vec3(0,1,0)));
+		rotation = mat4(1.0);
 	}
 
 	ExampleApp::~ExampleApp() {}
@@ -24,9 +22,9 @@ namespace basicgraphics {
 		// Setup the model matrix
 		glm::mat4 model = glm::mat4(1.0);
 
-		glm::mat4 rotate = glm::toMat4(glm::angleAxis(_angle, vec3(0, 1, 0))) * glm::toMat4(glm::angleAxis((float)radians(20.0), vec3(1.0, 0.0, 0.0)));
+		//glm::toMat4(glm::angleAxis(_angle, vec3(0, 1, 0))) * glm::toMat4(glm::angleAxis((float)radians(20.0), vec3(1.0, 0.0, 0.0)));
 		_angle += radians(1.0);
-		model = rotate * model;
+		model = rotation * model;
 
 		// Update shader variables
 		_shader.setUniform("view_mat", view);
@@ -36,23 +34,35 @@ namespace basicgraphics {
 
 		
 
-		_box->draw(_shader, model);
-        _line->draw(_shader, model);
-        _sphere->draw(_shader, model);
+		_foot->draw(_shader, model);
 	}
     
-    void ExampleApp::drawSphere(float angle, float dist, float radius, vec4 color) {
-        _line.reset(new Line(vec3(0, 0, 0), vec3(dist * cos(angle), dist * sin(angle), 0), vec3(0,0,1), 0.1, color));
-        _sphere.reset(new Sphere(vec3(dist * cos(angle), dist * sin(angle), 0), radius, color));
-    }
 
 	void ExampleApp::onEvent(shared_ptr<Event> event) {
 		string name = event->getName();
 		if (name == "kbd_ESC_down") {
 			glfwSetWindowShouldClose(_window, 1);
 		}
-		else {
-			cout << name << endl;
+		// Rotate the earth when the user clicks and drags the mouse
+		else if (name == "mouse_btn_left_down") {
+			mouseDown = true;
+			lastMousePos = event->get2DData();
 		}
-	}
+		else if (name == "mouse_btn_left_up") {
+			mouseDown = false;
+		}
+		else if (name == "mouse_pointer") {
+			// TODO: Update the "rotation" matrix based on how the user has dragged the mouse
+			// Note: the mouse movement since the last frame is stored in dxy.
+			if (mouseDown) {
+				vec2 dxy = vec2(event->get2DData()) - lastMousePos;
+				float rotationScale = .5;//in degrees
+				float magnitude = glm::length(dxy);
+				vec3 rotationVector = normalize(vec3(dxy.y, dxy.x, 0));
+				mat4 newRotation = toMat4(angleAxis(radians(rotationScale*magnitude), rotationVector));
+				rotation = newRotation * rotation;
+				lastMousePos = vec2(event->get2DData());
+			}
+		}
+		}
 }
