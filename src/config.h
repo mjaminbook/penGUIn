@@ -16,5 +16,6 @@ const std::string DATA_DIR = "/Users/rberman/Desktop/School/College/Semester 8/I
 
 // The file to load for the penguin head texture.
 const std::string TEXTURE_PATH = DATA_DIR + "PenguinHeadTexture.png";
+//const std::string TEXTURE_PATH = DATA_DIR + "earth-2k.jpg";
 
 #endif /* config_h */

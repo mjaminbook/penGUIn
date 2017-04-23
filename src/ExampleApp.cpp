@@ -12,6 +12,7 @@ namespace basicgraphics {
 //        _left_eye.reset(new Sphere(vec3(0.1,0.5 * sin(radians(15.0f)),0.5 * cos(radians(15.0f))), 0.05, vec4(0,0.2,0.5,1)));
 //        _right_eye.reset(new Sphere(vec3(-0.1,0.5 * sin(radians(15.0f)),0.5 * cos(radians(15.0f))), 0.05, vec4(0,0.2,0.5,1)));
         penguinHead.reset(new PenguinHead());
+        _angle = 1.0;
 	}
 
 	ExampleApp::~ExampleApp() {}
@@ -28,9 +29,10 @@ namespace basicgraphics {
 		// Setup the model matrix
 		glm::mat4 model = glm::mat4(1.0);
 
-//		glm::mat4 rotate = glm::toMat4(glm::angleAxis(radians(10.0), vec3(0, 1, 0))) * glm::toMat4(glm::angleAxis((float)radians(20.0), vec3(1.0, 0.0, 0.0)));
-//		_angle += radians(1.0);
-//		model = rotate * model;
+//        glm::mat4 rotate = toMat4(angleAxis((float)radians(_angle), vec3(0, 1, 0))) * toMat4(angleAxis((float)radians(_angle), vec3(1, 0, 0)));
+        glm::mat4 rotate = toMat4(angleAxis((float)radians(_angle), vec3(1, 0, 0)));
+		_angle += radians(10.0);
+		model = rotate * model;
 
 		// Update shader variables
 		_shader.setUniform("view_mat", view);
