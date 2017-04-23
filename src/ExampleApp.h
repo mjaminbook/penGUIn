@@ -1,5 +1,14 @@
+#ifndef ExampleApp_h
+#define ExampleApp_h
 
 #include "BaseApp.h"
+#include "PenguinHead.h"
+#include <string.h>
+#include <glm/glm/gtc/matrix_transform.hpp>
+#include "config.h"
+#include <iostream>
+#include <sstream>
+#include <fstream>
 
 namespace basicgraphics {
 
@@ -9,14 +18,16 @@ namespace basicgraphics {
 			~ExampleApp();
 
 		private:
-			std::unique_ptr<Mesh> _mesh;
-            std::vector< std::shared_ptr<Texture> > textures;
+//			std::unique_ptr<Mesh> _mesh;
+//            std::vector< std::shared_ptr<Texture> > textures;
         
-            std::unique_ptr<Sphere> _head;
-            std::unique_ptr<Cone> _beak;
-            std::unique_ptr<Sphere> _left_eye;
-            std::unique_ptr<Sphere> _right_eye;
-			float _angle;
+            std::shared_ptr<PenguinHead> penguinHead;
+        
+//            std::unique_ptr<Sphere> _head;
+//            std::unique_ptr<Cone> _beak;
+//            std::unique_ptr<Sphere> _left_eye;
+//            std::unique_ptr<Sphere> _right_eye;
+//			float _angle;
 
             void drawSphere(float angle, float dist, float radius, vec4 color);
 			void onRenderGraphics() override;
@@ -24,3 +35,5 @@ namespace basicgraphics {
             void drawHead(float radius);
 	};
 }
+
+#endif
