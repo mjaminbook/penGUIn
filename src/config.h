@@ -12,7 +12,7 @@
 #include <string>
 
 // Path
-const std::string DATA_DIR = "/Users/rberman/Desktop/School/College/Semester 8/Interactive Graphics/Project/data/";
+const std::string DATA_DIR = "/Users/rberman/Desktop/School/College/Semester 8/Interactive Graphics/Project/Penguin/data/";
 
 // The file to load for the penguin head texture.
 const std::string TEXTURE_PATH = DATA_DIR + "PenguinHeadTexture.png";
