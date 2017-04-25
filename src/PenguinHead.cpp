@@ -32,7 +32,7 @@ namespace basicgraphics {
         
         const float stackAngle = glm::pi<float>() / STACKS;
         const float sliceAngle = 2.0 * glm::pi<float>() / SLICES;
-        const float texStackHeight = -1.0 / STACKS;
+        const float texStackHeight = 1.0 / STACKS;
         const float texSliceWidth = 1.0 / SLICES;
         
         std::vector<vec3> topVerts;
@@ -55,12 +55,11 @@ namespace basicgraphics {
         stackBottomRadius = sqrt(pow(radius, 2) - pow(stackBottomY, 2));
         nextTop = vec3(0, stackTopY, 0);
         nextBottom = vec3(0, stackBottomY, stackBottomRadius);
-        bottomVerts.push_back(nextBottom);
         
         for (int slIndex = 0; slIndex <= SLICES; slIndex++) {
             prevBottom = nextBottom;
             nextBottom = vec3(stackBottomRadius * sin(sliceAngle * (slIndex + 1)), stackBottomY, stackBottomRadius * cos(sliceAngle * (slIndex + 1)));
-            bottomVerts.push_back(nextBottom);
+            bottomVerts.push_back(prevBottom);
             
             Mesh::Vertex vert1;
             vert1.position = nextTop;
@@ -86,7 +85,6 @@ namespace basicgraphics {
         
         // Draw body of head
         for (int stIndex = 1; stIndex < STACKS - 1; stIndex++) {
-//        for (int stIndex = 1; stIndex < 5; stIndex++) {
             stackTopY = stackBottomY;
             stackBottomY = radius * cos(stackAngle * (stIndex + 1));
             stackTopRadius = stackBottomRadius;
@@ -96,7 +94,6 @@ namespace basicgraphics {
             bottomVerts.clear();
             nextTop = topVerts[0];
             nextBottom = vec3(0, stackBottomY, stackBottomRadius);
-            bottomVerts.push_back(nextBottom);
             
             VBOIndex = vertexArray.size();
             
@@ -106,56 +103,57 @@ namespace basicgraphics {
                 nextTop = topVerts[slIndex + 1];
                 prevBottom = nextBottom;
                 nextBottom = vec3(stackBottomRadius * sin(sliceAngle * (slIndex + 1)), stackBottomY, stackBottomRadius * cos(sliceAngle * (slIndex + 1)));
-                bottomVerts.push_back(nextBottom);
-//                std::cout << nextTop.x << ", " << nextTop.y << ", " << nextTop.z << std::endl;
+                bottomVerts.push_back(prevBottom);
                 
                 Mesh::Vertex vert1;
                 vert1.position = prevTop;
                 vert1.normal = normalize(prevTop);
-                vert1.texCoord0 = vec2(slIndex * texSliceWidth, 1 - stIndex * texStackHeight);
+                vert1.texCoord0 = vec2(slIndex * texSliceWidth, 1 - (stIndex + 1) * texStackHeight);
                 vertexArray.push_back(vert1);
                 indexArray.push_back(slIndex * 6 + VBOIndex);
                 
                 Mesh::Vertex vert2;
                 vert2.position = prevBottom;
                 vert2.normal = normalize(prevBottom);
-                vert2.texCoord0 = vec2(slIndex * texSliceWidth, 1 - (stIndex + 1) * texStackHeight);
+                vert2.texCoord0 = vec2(slIndex * texSliceWidth, 1 - (stIndex + 2) * texStackHeight);
                 vertexArray.push_back(vert2);
                 indexArray.push_back(slIndex * 6 + 1 + VBOIndex);
                 
                 Mesh::Vertex vert3;
                 vert3.position = nextBottom;
                 vert3.normal = normalize(nextBottom);
-                vert3.texCoord0 = vec2((slIndex + 1) * texSliceWidth, 1 - (stIndex + 1) * texStackHeight);
+                vert3.texCoord0 = vec2((slIndex + 1) * texSliceWidth, 1 - (stIndex + 2) * texStackHeight);
                 vertexArray.push_back(vert3);
                 indexArray.push_back(slIndex * 6 + 2 + VBOIndex);
                 
                 Mesh::Vertex vert4;
                 vert4.position = prevTop;
                 vert4.normal = normalize(prevTop);
-                vert4.texCoord0 = vec2(slIndex * texSliceWidth, 1 - stIndex * texStackHeight);
+                vert4.texCoord0 = vec2(slIndex * texSliceWidth, 1 - (stIndex + 1) * texStackHeight);
                 vertexArray.push_back(vert4);
                 indexArray.push_back(slIndex * 6 + 3 + VBOIndex);
                 
                 Mesh::Vertex vert5;
                 vert5.position = nextBottom;
                 vert5.normal = normalize(nextBottom);
-                vert5.texCoord0 = vec2((slIndex + 1) * texSliceWidth, 1 - (stIndex + 1) * texStackHeight);
+                vert5.texCoord0 = vec2((slIndex + 1) * texSliceWidth, 1 - (stIndex + 2) * texStackHeight);
                 vertexArray.push_back(vert5);
                 indexArray.push_back(slIndex * 6 + 4 + VBOIndex);
                 
                 Mesh::Vertex vert6;
                 vert6.position = nextTop;
                 vert6.normal = normalize(nextTop);
-                vert6.texCoord0 = vec2((slIndex + 1) * texSliceWidth, 1 - stIndex * texStackHeight);
+                vert6.texCoord0 = vec2((slIndex + 1) * texSliceWidth, 1 - (stIndex + 1) * texStackHeight);
                 vertexArray.push_back(vert6);
                 indexArray.push_back(slIndex * 6 + 5 + VBOIndex);
+                
+                
             }
         }
-        for (Mesh::Vertex vert : vertexArray) {
-            vec3 pos = vert.position;
+//        for (Mesh::Vertex vert : vertexArray) {
+//            vec3 pos = vert.position;
 //            std::cout << pos.x << ", " << pos.y << ", " << pos.z << std::endl;
-        }
+//        }
         
         // Create bottom cone of head
         stackTopY = stackBottomY;
@@ -167,38 +165,35 @@ namespace basicgraphics {
         nextBottom = vec3(0, stackBottomY, 0);
         VBOIndex = vertexArray.size();
         
-//        for (int slIndex = 0; slIndex <= SLICES; slIndex++) {
-//            // Set the triangle points
-//            prevTop = nextTop;
-//            nextTop = topVerts[slIndex + 1];
-//            
-//            Mesh::Vertex vert1;
-//            vert1.position = prevTop;
-//            vert1.normal = normalize(prevTop);
-//            vert1.texCoord0 = vec2(slIndex * texSliceWidth, texStackHeight);
-//            vert1.texCoord0 = vec2(0.5, 0.5);
-//            vertexArray.push_back(vert1);
-//            indexArray.push_back(slIndex * 3 + VBOIndex);
-////            std::cout << slIndex * 3 + VBOIndex << std::endl;
-//            
-//            Mesh::Vertex vert2;
-//            vert2.position = nextBottom;
-//            vert2.normal = normalize(nextBottom);
-//            vert2.texCoord0 = vec2(slIndex * texSliceWidth, 0);
-//            vert2.texCoord0 = vec2(0.5, 0.5);
-//            vertexArray.push_back(vert2);
-//            indexArray.push_back(slIndex * 3 + 1 + VBOIndex);
-////            std::cout << slIndex * 3 + 1 + VBOIndex << std::endl;
-//            
-//            Mesh::Vertex vert3;
-//            vert3.position = nextTop;
-//            vert3.normal = normalize(nextTop);
-//            vert3.texCoord0 = vec2((slIndex + 1) * texSliceWidth, texStackHeight);
-//            vert3.texCoord0 = vec2(0.5, 0.5);
-//            vertexArray.push_back(vert3);
-//            indexArray.push_back(slIndex * 3 + 2 + VBOIndex);
-////            std::cout << slIndex * 3 + 2 + VBOIndex << std::endl;
-//        }
+        for (int slIndex = 0; slIndex <= SLICES; slIndex++) {
+            // Set the triangle points
+            prevTop = nextTop;
+            nextTop = topVerts[slIndex + 1];
+            
+            Mesh::Vertex vert1;
+            vert1.position = prevTop;
+            vert1.normal = normalize(prevTop);
+            vert1.texCoord0 = vec2(slIndex * texSliceWidth, texStackHeight);
+            vert1.texCoord0 = vec2(0.5, 0.5);
+            vertexArray.push_back(vert1);
+            indexArray.push_back(slIndex * 3 + VBOIndex);
+            
+            Mesh::Vertex vert2;
+            vert2.position = nextBottom;
+            vert2.normal = normalize(nextBottom);
+            vert2.texCoord0 = vec2(slIndex * texSliceWidth, 0);
+            vert2.texCoord0 = vec2(0.5, 0.5);
+            vertexArray.push_back(vert2);
+            indexArray.push_back(slIndex * 3 + 1 + VBOIndex);
+            
+            Mesh::Vertex vert3;
+            vert3.position = nextTop;
+            vert3.normal = normalize(nextTop);
+            vert3.texCoord0 = vec2((slIndex + 1) * texSliceWidth, texStackHeight);
+            vert3.texCoord0 = vec2(0.5, 0.5);
+            vertexArray.push_back(vert3);
+            indexArray.push_back(slIndex * 3 + 2 + VBOIndex);
+        }
         
         const int numVertices = vertexArray.size();
         const int vertexByteSize = sizeof(Mesh::Vertex) * numVertices;

@@ -30,9 +30,9 @@ namespace basicgraphics {
 		glm::mat4 model = glm::mat4(1.0);
 
 //        glm::mat4 rotate = toMat4(angleAxis((float)radians(_angle), vec3(0, 1, 0))) * toMat4(angleAxis((float)radians(_angle), vec3(1, 0, 0)));
-        glm::mat4 rotate = toMat4(angleAxis((float)radians(_angle), vec3(1, 0, 0)));
+//        glm::mat4 rotate = toMat4(angleAxis((float)radians(_angle), vec3(1, 0, 0)));
 		_angle += radians(10.0);
-		model = rotate * model;
+		model = rotation * model;
 
 		// Update shader variables
 		_shader.setUniform("view_mat", view);
@@ -53,12 +53,30 @@ namespace basicgraphics {
     }
 
 	void ExampleApp::onEvent(shared_ptr<Event> event) {
-		string name = event->getName();
-		if (name == "kbd_ESC_down") {
-			glfwSetWindowShouldClose(_window, 1);
-		}
-		else {
-			cout << name << endl;
-		}
+        string name = event->getName();
+        if (name == "kbd_ESC_down") {
+            glfwSetWindowShouldClose(_window, 1);
+        }
+        // Rotate the earth when the user clicks and drags the mouse
+        else if (name == "mouse_btn_left_down") {
+            mouseDown = true;
+            lastMousePos = event->get2DData();
+        }
+        else if (name == "mouse_btn_left_up") {
+            mouseDown = false;
+        }
+        else if (name == "mouse_pointer") {
+            // TODO: Update the "rotation" matrix based on how the user has dragged the mouse
+            // Note: the mouse movement since the last frame is stored in dxy.
+            if (mouseDown) {
+                vec2 dxy = vec2(event->get2DData()) - lastMousePos;
+                float rotationScale = .5;//in degrees
+                float magnitude = glm::length(dxy);
+                vec3 rotationVector = normalize(vec3(dxy.y, dxy.x, 0));
+                mat4 newRotation = toMat4(angleAxis(radians(rotationScale*magnitude), rotationVector));
+                rotation = newRotation * rotation;
+                lastMousePos = vec2(event->get2DData());
+            }
+        }
 	}
 }

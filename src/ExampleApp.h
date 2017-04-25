@@ -27,8 +27,13 @@ namespace basicgraphics {
 //            std::unique_ptr<Cone> _beak;
 //            std::unique_ptr<Sphere> _left_eye;
 //            std::unique_ptr<Sphere> _right_eye;
-			float _angle;
 
+            float _angle;
+            glm::mat4 rotation;
+            bool mouseDown;
+            glm::vec2 lastMousePos;
+        
+        
             void drawSphere(float angle, float dist, float radius, vec4 color);
 			void onRenderGraphics() override;
 			void onEvent(std::shared_ptr<Event> event) override;
