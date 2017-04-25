@@ -6,7 +6,8 @@ using namespace std;
 namespace basicgraphics {
 	ExampleApp::ExampleApp(int argc, char** argv, std::string windowName, int windowWidth, int windowHeight) : BaseApp(argc, argv, windowName, windowWidth, windowHeight)
 	{
-		_foot.reset(new Feet(1., vec3(0,1,0)));
+		//_foot.reset(new Feet(1., vec3(0,1,0)));
+		_body.reset(new Elipsoid(1, 0.5, vec3(.5,0,0)));
 		rotation = mat4(1.0);
 	}
 
@@ -33,7 +34,8 @@ namespace basicgraphics {
 		_shader.setUniform("model_mat", model);
 		_shader.setUniform("eye_world", eye_world);
 
-		_foot->draw(_shader, model);
+		//_foot->draw(_shader, model);
+		_body->draw(_shader, model);
 	}
 
 	void ExampleApp::onEvent(shared_ptr<Event> event) {

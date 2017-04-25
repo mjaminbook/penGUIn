@@ -13,6 +13,7 @@ namespace basicgraphics {
             std::unique_ptr<Line> _line;
             std::unique_ptr<Sphere> _sphere;
 			std::unique_ptr<Feet> _foot;
+			std::unique_ptr<Elipsoid> _body;
 
 			float _angle;
 			glm::mat4 rotation;

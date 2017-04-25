@@ -30,6 +30,7 @@
 #include "Line.h"
 #include "Event.h"
 #include "Feet.h"
+#include "Elipsoid.h"
 
 namespace basicgraphics {
 
